@@ -1,49 +1,37 @@
 # 🏓 PadelMatch — App Flutter para jugadores de pádel
 
-**PadelMatch** es una aplicación móvil multiplataforma (Flutter) diseñada para conectar jugadores de pádel fácilmente, permitiendo organizar partidos, registrarse, y emparejarse según nivel y zona geográfica.
+**PadelMatch** es una aplicación móvil multiplataforma (Flutter) para conectar jugadores de pádel, organizar partidos y emparejarse según nivel y zona geográfica.
 
 ## 🚀 Requisitos previos
 
-Antes de comenzar, asegúrate de tener instalado lo siguiente:
-
-- Flutter SDK: https://docs.flutter.dev/get-started/install
-- Visual Studio Code: https://code.visualstudio.com/
-- Extensión de Flutter en VS Code (Dart & Flutter)
+- [Flutter SDK](https://docs.flutter.dev/get-started/install)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- Extensión Dart & Flutter para VS Code
 - Git
 
 ## 🧰 Instalación y ejecución
 
-1. Clona el repositorio:
-
-```
+```sh
 git clone https://github.com/tuusuario/padelmatch.git
 cd padelmatch
-```
-
-2. Instala las dependencias:
-
-```
 flutter pub get
 ```
 
-3. Ejecuta en entorno de desarrollo:
+### Ejecutar en desarrollo
 
-- En emulador Android o iOS (o dispositivo físico conectado):
-
-```
-flutter run
-```
-
-- En navegador (Chrome recomendado):
-
-```
-flutter run -d chrome
-```
+- **Emulador Android/iOS o dispositivo físico:**
+  ```sh
+  flutter run
+  ```
+- **Navegador (Chrome recomendado):**
+  ```sh
+  flutter run -d chrome
+  ```
 
 ## 🧪 Plataformas soportadas
 
 | Plataforma     | Estado     | Notas                   |
-|----------------|------------|-------------------------|
+|---------------|------------|-------------------------|
 | Android        | ✅ Estable |                         |
 | iOS            | ✅ Estable | Requiere Xcode (macOS)  |
 | Web            | ✅ Estable | Chrome recomendado      |
@@ -51,33 +39,36 @@ flutter run -d chrome
 
 ## 📦 Estructura del proyecto
 
-lib/  
-├── main.dart                    # Entrada principal  
-├── login_screen_neumorphic.dart  
-└── onboarding/                 # Pantallas de onboarding  
-
-assets/  
-└── images/                     # Logotipos e ilustraciones
+```
+lib/
+  main.dart                # Entrada principal
+  features/
+    auth/                  # Pantallas de login
+    onboarding/            # Onboarding y registro
+  shared/                  # Temas, widgets reutilizables
+  l10n/                    # Localización
+assets/
+  images/                  # Logotipos e ilustraciones
+  fonts/                   # Tipografías
+```
 
 ## 🛠 Tips por sistema operativo
 
 ### Linux / macOS
-
 - Instala Flutter desde Snap o manualmente (.tar.gz)
 - Agrega Flutter al PATH en `.bashrc`, `.zshrc` o `.bash_profile`
 - Usa `flutter doctor` para diagnosticar el entorno
 - Usa Chrome como navegador de desarrollo para web
 
 ### Windows
-
-- Instala Git for Windows: https://gitforwindows.org/
+- Instala [Git for Windows](https://gitforwindows.org/)
 - Agrega Flutter al PATH (`flutter/bin`)
 - Usa Git Bash o PowerShell como terminal en VS Code
 - Requiere Android Studio para usar emulador
 
 ## 🧹 Comandos útiles
 
-```
+```sh
 flutter clean             # Limpia cachés y builds
 flutter doctor            # Diagnóstico del entorno
 flutter pub upgrade       # Actualiza dependencias
