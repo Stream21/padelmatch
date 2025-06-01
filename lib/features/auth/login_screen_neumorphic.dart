@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/gestures.dart';
+import '../../routing/nav_helper.dart';
+import '../../l10n/app_localizations.dart';
 
 class LoginScreenNeumorphic extends StatelessWidget {
   final VoidCallback onToggleTheme;
@@ -11,12 +14,10 @@ class LoginScreenNeumorphic extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double maxCardWidth = screenWidth < 600 ? screenWidth * 0.9 : 400;
 
-    final Color baseColor = isDark
-        ? const Color(0xFF121212)
-        : const Color(0xFFF0F0F3);
-    final Color cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
-    final Color textColor = isDark ? Colors.white : Colors.black87;
-    final Color accentColor = Colors.cyanAccent;
+    final Color baseColor = Theme.of(context).colorScheme.background;
+    final Color cardColor = Theme.of(context).colorScheme.surface;
+    final Color textColor = Theme.of(context).colorScheme.onSurface;
+    final Color accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
       backgroundColor: baseColor,
@@ -45,7 +46,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
 
                 // SLOGAN
                 Text(
-                  "Conecta. Juega. Compite.",
+                  AppLocalizations.of(context)!.loginSlogan,
                   style: TextStyle(
                     color: textColor.withOpacity(0.7),
                     fontSize: screenWidth < 600 ? 14 : 16,
@@ -57,7 +58,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
                 // BOTÓN GOOGLE
                 _buildOAuthButton(
                   icon: Icons.g_mobiledata,
-                  text: "Continuar con Google",
+                  text: AppLocalizations.of(context)!.loginContinueWithGoogle,
                   onTap: () {},
                   backgroundColor: cardColor,
                   textColor: textColor,
@@ -67,7 +68,9 @@ class LoginScreenNeumorphic extends StatelessWidget {
                 // BOTÓN APPLE
                 _buildOAuthButton(
                   icon: FontAwesomeIcons.instagram,
-                  text: "Continuar con Instagram",
+                  text: AppLocalizations.of(
+                    context,
+                  )!.loginContinueWithInstagram,
                   onTap: () {},
                   backgroundColor: cardColor,
                   textColor: textColor,
@@ -81,7 +84,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        "o",
+                        AppLocalizations.of(context)!.loginOr,
                         style: TextStyle(color: textColor.withOpacity(0.6)),
                       ),
                     ),
@@ -92,7 +95,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
 
                 // INPUTS
                 _buildInput(
-                  hintText: 'Correo electrónico',
+                  hintText: AppLocalizations.of(context)!.loginEmail,
                   isDark: isDark,
                   cardColor: cardColor,
                   textColor: textColor,
@@ -100,7 +103,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildInput(
-                  hintText: 'Contraseña',
+                  hintText: AppLocalizations.of(context)!.loginPassword,
                   obscureText: true,
                   isDark: isDark,
                   cardColor: cardColor,
@@ -111,20 +114,29 @@ class LoginScreenNeumorphic extends StatelessWidget {
 
                 // BOTÓN REGISTRO
                 _buildRoundedButton(
-                  text: "Registrarse con Email",
+                  text: AppLocalizations.of(context)!.loginRegisterWithEmail,
                   backgroundColor: accentColor,
                 ),
                 const SizedBox(height: 16),
 
                 // ENLACE LOGIN
-                Text.rich(
-                  TextSpan(
-                    text: "¿Ya tienes una cuenta? ",
+                RichText(
+                  text: TextSpan(
+                    text:
+                        AppLocalizations.of(context)!.loginAlreadyHaveAccount +
+                        ' ',
                     style: TextStyle(color: textColor.withOpacity(0.6)),
                     children: [
                       TextSpan(
-                        text: "Inicia sesión",
-                        style: TextStyle(color: accentColor),
+                        text: AppLocalizations.of(context)!.loginSignIn,
+                        style: TextStyle(
+                          color: isDark ? Color(0xFF20E3B2) : Color(0xFF4ABDAC),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            context.openOnboarding(); // Navega a onboarding
+                          },
                       ),
                     ],
                   ),
@@ -135,7 +147,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
                 IconButton(
                   icon: Icon(
                     isDark ? Icons.wb_sunny : Icons.nights_stay,
-                    color: accentColor,
+                    color: isDark ? Colors.amber : Colors.indigo,
                   ),
                   onPressed: onToggleTheme,
                 ),
@@ -183,22 +195,39 @@ class LoginScreenNeumorphic extends StatelessWidget {
     required String text,
     required Color backgroundColor,
   }) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [backgroundColor, Colors.cyan]),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final Color buttonColor = isDark
+            ? const Color(0xFF20E3B2) // verde-azul neón en oscuro
+            : const Color(0xFF4ABDAC); // verde agua en claro
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: buttonColor,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.10),
+                blurRadius: 8,
+                offset: const Offset(2, 2),
+              ),
+            ],
           ),
-        ),
-      ),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -212,7 +241,16 @@ class LoginScreenNeumorphic extends StatelessWidget {
     return StatefulBuilder(
       builder: (context, setState) {
         bool isHovered = false;
-
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final Color buttonColor = isDark
+            ? const Color(0xFF232946) // azul oscuro neutro
+            : Colors.white;
+        final Color iconColor = isDark
+            ? const Color(0xFF20E3B2) // verde-azul neón
+            : const Color(0xFF4ABDAC); // verde agua
+        final Color labelColor = isDark
+            ? Colors.white
+            : const Color(0xFF22223B);
         return MouseRegion(
           onEnter: (_) => setState(() => isHovered = true),
           onExit: (_) => setState(() => isHovered = false),
@@ -222,12 +260,12 @@ class LoginScreenNeumorphic extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: backgroundColor,
+                color: buttonColor,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: isHovered
                     ? [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withOpacity(0.18),
                           offset: const Offset(2, 2),
                           blurRadius: 8,
                         ),
@@ -239,7 +277,7 @@ class LoginScreenNeumorphic extends StatelessWidget {
                       ]
                     : [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
+                          color: Colors.black.withOpacity(0.10),
                           offset: const Offset(4, 4),
                           blurRadius: 10,
                         ),
@@ -252,12 +290,16 @@ class LoginScreenNeumorphic extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(icon, color: textColor),
+                  Icon(icon, color: iconColor),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
                       text,
-                      style: TextStyle(color: textColor, fontSize: 16),
+                      style: TextStyle(
+                        color: labelColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
